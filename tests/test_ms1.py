@@ -21,7 +21,7 @@ codelet2.add_output(msg)
 codelet2.add_output(trigger)
 
 insert_codelet(codelet)
-insert_codelet(codelet)
+insert_codelet(codelet2)
 
 start()
 
