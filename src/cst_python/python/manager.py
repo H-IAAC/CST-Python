@@ -1,7 +1,7 @@
 from typing import Any
 
-from cst_python.codelet import Codelet
-from cst_python.memory_object import MemoryObject
+from cst_python.core.entities.codelet import Codelet
+from cst_python.core.entities.memory_object import MemoryObject
 
 
 def create_memory_object(name:str, info:Any) -> MemoryObject:
