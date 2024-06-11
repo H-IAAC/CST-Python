@@ -50,6 +50,15 @@ class MemoryObject(Memory):
     def get_timestamp(self) -> float:
         return self._timestamp
 
+    @property
+    def timestamp(self) -> float:
+        return self._timestamp
+
+    #@alias.alias("setTimestamp")
+    @timestamp.getter
+    def timestamp(self, value:float) -> None:
+        self._timestamp = value
+
     def get_name(self) -> str:
         return self._name
 
