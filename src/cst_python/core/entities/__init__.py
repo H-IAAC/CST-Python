@@ -4,3 +4,6 @@ from .memory_buffer import MemoryBuffer
 from .memory_object import MemoryObject
 from .memory import Memory
 from .memory_observer import MemoryObserver
+from .memory_container import MemoryContainer
+from .rest_memory_container import RESTMemoryContainer
+from .rest_memory_object import RESTMemoryObject
