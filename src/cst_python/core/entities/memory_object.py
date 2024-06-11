@@ -35,7 +35,7 @@ class MemoryObject(Memory):
     
     def set_info(self, value: Any) -> int:
         self._info = value
-        self._set_timestamp(time.time())
+        self._timestamp = time.time()
         self._notify_memory_observers()
 
         return -1
@@ -55,7 +55,7 @@ class MemoryObject(Memory):
         return self._timestamp
 
     #@alias.alias("setTimestamp")
-    @timestamp.getter
+    @timestamp.setter
     def timestamp(self, value:float) -> None:
         self._timestamp = value
 
@@ -76,8 +76,8 @@ class MemoryObject(Memory):
 
     #@alias.alias("toString", "to_string")
     def __str__(self) -> str:
-        return f"MemoryObject [idmemoryobject={self._id}, 
-                timestamp={self._timestamp}, evaluation={self._evaluation}, 
+        return f"MemoryObject [idmemoryobject={self._id}, \
+                timestamp={self._timestamp}, evaluation={self._evaluation}, \
                 I={self._info}, name={self._name}]"
     
     #@alias.alias("hashCode", "hash_code")

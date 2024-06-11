@@ -58,7 +58,7 @@ class Codelet(abc.ABC):
     def enabled(self, value:bool) -> None:
         self._enabled = value
 
-        if self._status:
+        if self._enabled:
             self._enable_count = 0
 
     #@alias.alias("get_name", "getName")
@@ -79,8 +79,8 @@ class Codelet(abc.ABC):
     #@alias.alias("set_activation", "setActivation")
     @activation.setter
     def activation(self, value:float):
-        if value > 1.0 or value < 1.0:
-            raise ValueError(f"Codelet activation must be in (0.0 , 1.0) 
+        if value > 1.0 or value < 0.0:
+            raise ValueError(f"Codelet activation must be in (0.0 , 1.0) \
                              (value {value} is not allowed).")
         
         self._activation = value
@@ -106,19 +106,21 @@ class Codelet(abc.ABC):
         self._outputs = value
 
     #@alias.alias("get_threshould", "getThreshould")
+    @property
     def threshould(self) -> float:
-        return self._threshould
+        return self._threshold
 
     #@alias.alias("set_threshould", "setThreshould")
     @threshould.setter
     def threshould(self, value:float):
         if value > 1.0 or value < 1.0:
-            raise ValueError(f"Codelet threshould must be in (0.0 , 1.0) 
+            raise ValueError(f"Codelet threshould must be in (0.0 , 1.0) \
                              (value {value} is not allowed).")
         
-        self._threshould = value
+        self._threshold = value
 
     #@alias.alias("get_time_step", "getTime_step")
+    @property
     def time_step(self) -> float:
         return self._time_step
 
@@ -139,9 +141,8 @@ class Codelet(abc.ABC):
     def broadcast(self, value:List[Memory]) -> None:
         self._broadcast = value
 
-
-
     #@alias.alias("IsProfiling")
+    @property
     def is_profiling(self) -> bool:
         return self._is_profiling
 
@@ -186,15 +187,17 @@ class Codelet(abc.ABC):
             traceback.print_exception(e)
 
     def start(self) -> None:
-        thread = threading.Thread(target=self.run)
+        thread = threading.Thread(target=self.run, daemon=True)
         self._thread = thread
 
-        thread.run()
+        thread.start()
+        #thread.join(0.0)
 
         
 
     def stop(self):
         self.loop = False
+        self._thread.join(0.0)
 
     #@alias.alias("impendingAccess")
     def impending_acess(self, accessing:Codelet) -> bool:
@@ -332,12 +335,7 @@ class Codelet(abc.ABC):
                         list_MO.append(m)
 
             if len(list_MO) >= index+1:
-                found_MO = list_MO[index]
-                self.enabled = True
-            else:
-                self.enabled = False
-
-                self._enable_count += 1
+                found_MO = list_MO[index]        
 
         elif name is not None:
             for m in search_list:
@@ -345,19 +343,25 @@ class Codelet(abc.ABC):
                     found_MO = m
                     break
 
+        if found_MO is None:
+            self._enabled = False
+            self._enable_count += 1
+        else:
+            self.enabled = True
+
         return found_MO
 
     #@alias.alias("getInput")
     def get_input(self, type:Optional[str]=None, index:Optional[int]=None, name:Optional[str]=None) -> Memory:
-        self._get_memory(self._inputs, type, index, name)
+        return self._get_memory(self._inputs, type, index, name)
 
     #@alias.alias("getOutput")
     def get_output(self, type:Optional[str]=None, index:Optional[int]=None, name:Optional[str]=None) -> Memory:
-        self._get_memory(self._outputs, type, index, name)
+        return self._get_memory(self._outputs, type, index, name)
 
     #@alias.alias("getBroadcast")
     def get_broadcast(self, type:Optional[str]=None, index:Optional[int]=None, name:Optional[str]=None) -> Memory:
-        self._get_memory(self._broadcast, type, index, name)
+        return self._get_memory(self._broadcast, type, index, name)
 
     
     #@alias.alias("setPublishSubscribe")
@@ -440,7 +444,7 @@ class Codelet(abc.ABC):
                     if not self._is_memory_observer:
                         self.calculate_activation()
 
-                        if self._activation > self._threshold:
+                        if self._activation >= self._threshold:
                             self.proc()
 
                 else:
@@ -448,8 +452,9 @@ class Codelet(abc.ABC):
 
             
             except Exception as e:
-                pass
+                traceback.print_exception(e)
                 #logging
+                pass
 
             finally:
                 if not self._is_memory_observer and self._loop:

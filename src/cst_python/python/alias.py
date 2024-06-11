@@ -13,8 +13,8 @@ class aliased:
             if hasattr(member, "_aliases"):
                 for alias in member._aliases:
                     if alias in members:
-                        warnings.warn(f"Class {cls.__name__} already have
-                                    member with name {alias}, alias of 
+                        warnings.warn(f"Class {cls.__name__} already have \
+                                    member with name {alias}, alias of \
                                     {member_name} not created.")
 
                     setattr(cls, alias, member)
