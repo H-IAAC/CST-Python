@@ -22,7 +22,7 @@ class Codelet(abc.ABC):
         self._broadcast : List[Memory] = []
         self._loop = True
         self._is_memory_observer = False
-        self._time_step = 3001
+        self._time_step = 300
         self._enabled = True
         self._enable_count = 0
         self._name = threading.currentThread().name
@@ -460,4 +460,5 @@ class Codelet(abc.ABC):
             if run:
                 #Not right, must wait anytime
                 time_to_sleep = self._additional_wait + self._time_step
+                time_to_sleep /= 1000 #ms to s
                 time.sleep(time_to_sleep)
