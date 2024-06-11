@@ -23,7 +23,7 @@ class aliased:
 
 
 class alias:
-    def __init__(self, *aliases) -> None:
+    def __init__(self, *aliases:str) -> None:
         self._aliases = set(aliases)
 
     def __call__(self, method:Callable) -> Callable:
