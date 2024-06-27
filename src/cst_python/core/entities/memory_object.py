@@ -95,7 +95,7 @@ class MemoryObject(Memory):
     
     #@alias.alias("equals")
     def __eq__(self, value: MemoryObject) -> bool:
-        if self == value:
+        if id(self) == id(value):
             return True
         if value is None:
             return False

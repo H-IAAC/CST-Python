@@ -14,6 +14,7 @@ from .memory_buffer import MemoryBuffer
 
 #@alias.aliased
 class Codelet(abc.ABC):
+    _last_id = 0
 
     def __init__(self) -> None:
         self._threshold = 0.0
@@ -25,7 +26,7 @@ class Codelet(abc.ABC):
         self._time_step = 300
         self._enabled = True
         self._enable_count = 0
-        self._name = threading.currentThread().name
+        self._name = threading.currentThread().name+"|"+type(self).__name__+str(Codelet._last_id)
         self._last_start_time = 0.0
         self._lock = threading.RLock()
         self._activation = 0.0
@@ -35,6 +36,7 @@ class Codelet(abc.ABC):
         self._codelet_profiler = None
         self._additional_wait = 0.0
 
+        Codelet._last_id += 1
 
 
     
@@ -452,7 +454,7 @@ class Codelet(abc.ABC):
 
             
             except Exception as e:
-                traceback.print_exception(e)
+                print(traceback.format_exc())
                 #logging
                 pass
 
