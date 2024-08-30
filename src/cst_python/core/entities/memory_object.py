@@ -77,9 +77,12 @@ class MemoryObject(Memory):
     #@alias.alias("toString", "to_string")
     def __str__(self) -> str:
         return f"MemoryObject [idmemoryobject={self._id}, \
-                timestamp={self._timestamp}, evaluation={self._evaluation}, \
-                I={self._info}, name={self._name}]"
+timestamp={self._timestamp}, evaluation={self._evaluation}, \
+I={self._info}, name={self._name}]"
     
+    def __repr__(self) -> str:
+        return str(self)
+
     #@alias.alias("hashCode", "hash_code")
     def __hash__(self) -> int:
         prime = 31
