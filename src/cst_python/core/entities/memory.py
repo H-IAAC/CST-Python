@@ -38,7 +38,7 @@ class Memory(abc.ABC):
 
     #@alias.alias("getTimestamp")
     @abc.abstractmethod
-    def get_timestamp(self) -> float:
+    def get_timestamp(self) -> int:
         ...
 
     #@alias.alias("addMemoryObserver")
@@ -53,17 +53,17 @@ class Memory(abc.ABC):
 
     #@alias.alias("getId")
     @abc.abstractmethod
-    def get_id(self) -> float:
+    def get_id(self) -> int:
         ...
 
     #@alias.alias("setId")
     @abc.abstractmethod
-    def set_id(self, memory_id:float) -> None:
+    def set_id(self, memory_id:int) -> None:
         ...
 
     #@alias.alias("getTimestamp")
     @abc.abstractmethod
-    def get_timestamp(self) -> float:
+    def get_timestamp(self) -> int:
         ...
     
 
