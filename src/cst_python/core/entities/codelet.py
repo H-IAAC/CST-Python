@@ -107,16 +107,16 @@ class Codelet(abc.ABC):
     def outputs(self, value:List[Memory]):
         self._outputs = value
 
-    #@alias.alias("get_threshould", "getThreshould")
+    #@alias.alias("get_threshold", "getThreshold")
     @property
-    def threshould(self) -> float:
+    def threshold(self) -> float:
         return self._threshold
 
-    #@alias.alias("set_threshould", "setThreshould")
-    @threshould.setter
-    def threshould(self, value:float):
+    #@alias.alias("set_threshold", "setThreshold")
+    @threshold.setter
+    def threshold(self, value:float):
         if value > 1.0 or value < 1.0:
-            raise ValueError(f"Codelet threshould must be in (0.0 , 1.0) \
+            raise ValueError(f"Codelet threshold must be in (0.0 , 1.0) \
                              (value {value} is not allowed).")
         
         self._threshold = value
@@ -408,7 +408,7 @@ class Codelet(abc.ABC):
             if self._enable_count == 0:
                 self.calculate_activation()
 
-                if self.activation >= self.threshould:
+                if self.activation >= self.threshold:
                     self.proc()
             else:
                 self._raise_exception()
