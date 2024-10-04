@@ -61,10 +61,6 @@ class Memory(abc.ABC):
     def set_id(self, memory_id:int) -> None:
         ...
 
-    #@alias.alias("getTimestamp")
-    @abc.abstractmethod
-    def get_timestamp(self) -> int:
-        ...
     
 
     def compare_name(self, other_name:str) -> bool:

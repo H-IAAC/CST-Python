@@ -26,7 +26,7 @@ class Codelet(abc.ABC):
         self._time_step = 300
         self._enabled = True
         self._enable_count = 0
-        self._name = threading.currentThread().name+"|"+type(self).__name__+str(Codelet._last_id)
+        self._name = threading.current_thread().name+"|"+type(self).__name__+str(Codelet._last_id)
         self._last_start_time = 0.0
         self._lock = threading.RLock()
         self._activation = 0.0
@@ -82,8 +82,13 @@ class Codelet(abc.ABC):
     @activation.setter
     def activation(self, value:float):
         if value > 1.0 or value < 0.0:
+            if value > 1.0:
+                self._activation = 1.0
+            else:
+                self._activation = 0.0
+
             raise ValueError(f"Codelet activation must be in (0.0 , 1.0) \
-                             (value {value} is not allowed).")
+(value {value} is not allowed).")
         
         self._activation = value
 
@@ -115,9 +120,14 @@ class Codelet(abc.ABC):
     #@alias.alias("set_threshold", "setThreshold")
     @threshold.setter
     def threshold(self, value:float):
-        if value > 1.0 or value < 1.0:
+        if value > 1.0 or value < 0.0:
+            if value > 1.0:
+                self._threshold = 1.0
+            else:
+                self._threshold = 0.0
+
             raise ValueError(f"Codelet threshold must be in (0.0 , 1.0) \
-                             (value {value} is not allowed).")
+(value {value} is not allowed).")
         
         self._threshold = value
 
@@ -145,12 +155,12 @@ class Codelet(abc.ABC):
 
     #@alias.alias("IsProfiling")
     @property
-    def is_profiling(self) -> bool:
+    def profiling(self) -> bool:
         return self._is_profiling
 
     #@alias.alias("set_profiling", "setProfiling")
-    @is_profiling.setter
-    def is_profiling(self, value:bool):
+    @profiling.setter
+    def profiling(self, value:bool):
         if value is True:
             raise NotImplementedError("Profiling is not implemented")
 
@@ -299,7 +309,7 @@ class Codelet(abc.ABC):
 
     #@alias.alias("getThreadName")
     def get_thread_name(self) -> str:
-        return threading.currentThread().name
+        return threading.current_thread().name
     
     #@alias.alias("to_string", "toString")
     def __str__(self) -> str:
@@ -308,16 +318,18 @@ class Codelet(abc.ABC):
         result = f"Codelet [activation={self._activation}, name={self._name}, "
 
         if self._broadcast is not None:
-            result += self._broadcast[min(len(self._broadcast), max_len)]
+            result += "broadcast="
+            result += str(self._broadcast[:min(len(self._broadcast), max_len)])
             result += ", "
-        
+
         if self._inputs is not None:
-            result += self._inputs[min(len(self._outputs), max_len)]
+            result += "inputs="
+            result += str(self._inputs[:min(len(self.inputs), max_len)])
             result += ", "
 
         if self._outputs is not None:
-            result += self._outputs[min(len(self._outputs), max_len)]
-            result += ", "
+            result += "outputs="
+            result += str(self._outputs[:min(len(self._outputs), max_len)])
         
         result += "]"
 
@@ -414,7 +426,7 @@ class Codelet(abc.ABC):
                 self._raise_exception()
 
         except Exception as e:
-            #Logging
+            #TODO Logging
             pass
         
         finally:

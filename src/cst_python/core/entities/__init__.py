@@ -8,3 +8,4 @@ from .memory_container import MemoryContainer
 from .rest_memory_container import RESTMemoryContainer
 from .rest_memory_object import RESTMemoryObject
 from .mind import Mind
+from .raw_memory import RawMemory
