@@ -1,4 +1,4 @@
-name: evolvepy CI/CD
+name: Test
 on:
   push:
     branches: [ develop, main ]
@@ -8,11 +8,12 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.7","3.8", "3.9", "3.10"]
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - uses: actions/checkout@v2
@@ -24,10 +25,9 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         python3 -m pip install pytest
-        if [ -f setup.cfg ]; then python3 -m pip install . ; fi
+        python3 -m pip install .[tests]
 
-    - name: Test with pytest
+    - name: Tests
       run: |
-        cd ./test
         pytest
       shell: bash
