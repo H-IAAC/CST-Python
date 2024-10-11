@@ -4,7 +4,7 @@ from cst_python import Mind, MemoryObject
 from .utils import CodeletMock
 
 
-class MindTest(unittest.TestCase):
+class TestMind(unittest.TestCase):
     def setUp(self) -> None:
         self.test_codelet = CodeletMock()
         self.mind = Mind()

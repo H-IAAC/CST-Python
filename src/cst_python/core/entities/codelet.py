@@ -32,7 +32,7 @@ class Codelet(abc.ABC):
         self._activation = 0.0
         #self._timer = 
         self._is_profiling = False
-        self._thread : threading.Thread = None
+        self._thread : threading.Thread = threading.Thread(target=self.run, daemon=True)
         self._codelet_profiler = None
         self._additional_wait = 0.0
 
@@ -199,17 +199,17 @@ class Codelet(abc.ABC):
             traceback.print_exception(e)
 
     def start(self) -> None:
-        thread = threading.Thread(target=self.run, daemon=True)
-        self._thread = thread
 
-        thread.start()
+        self._thread.start()
         #thread.join(0.0)
 
         
 
     def stop(self):
         self.loop = False
-        self._thread.join(0.0)
+
+        if self._thread.is_alive():
+            self._thread.join(0.0)
 
     #@alias.alias("impendingAccess")
     def impending_acess(self, accessing:Codelet) -> bool:
