@@ -9,11 +9,12 @@ from typing import List, Optional
 from cst_python.python import alias
 from .memory import Memory
 from .memory_buffer import MemoryBuffer
+from .memory_observer import MemoryObserver
 
 #TODO: Profile, Broadcast, impending access, correct exception types
 
 #@alias.aliased
-class Codelet(abc.ABC):
+class Codelet(MemoryObserver): #(abc.ABC) is not necessary
     _last_id = 0
 
     def __init__(self) -> None:
