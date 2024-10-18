@@ -1,10 +1,9 @@
 [build-system]
-requires = ["setuptools>=61.2"]
+requires = ["setuptools>=61.2", "setuptools_scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "cst_python"
-version = "0.1.0"
 authors = [{name = "H.IAAC", email = "hiaac@unicamp.br"}]
 description = "Python module of the CST, the Cognitive Systems Toolkit, a toolkit for the construction of cognitive systems and cognitive architectures."
 classifiers = [
@@ -15,6 +14,7 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
 ]
+dynamic = ["version"]
 
 [project.readme]
 file = "README.md"
@@ -37,3 +37,5 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = false
+
+[tool.setuptools_scm]
