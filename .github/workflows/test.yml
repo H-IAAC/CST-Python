@@ -6,7 +6,7 @@ on:
     branches: [ dev, main ]
 
 jobs:
-  build:
+  test:
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -33,6 +33,23 @@ jobs:
         pytest --cov=cst_python --cov-report json  
       shell: bash
 
+    - if: ${{matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'}}
+      name: Upload coverage report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage_report
+        path: coverage.json
+  
+  coverage-check:
+    runs-on: ubuntu-latest
+    needs: 
+      - test
+
+    steps:
+    - name: Retrieve coverage report
+      uses: actions/download-artifact@v4
+      with:
+        name: coverage_report
     - name: Coverage Check
       run: |
         python3 tests/check_coverage.py
