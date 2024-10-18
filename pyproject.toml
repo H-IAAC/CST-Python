@@ -1,6 +1,39 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel"
-]
+requires = ["setuptools>=61.2"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "cst_python"
+version = "0.1.0"
+authors = [{name = "H.IAAC", email = "hiaac@unicamp.br"}]
+description = "Python module of the CST, the Cognitive Systems Toolkit, a toolkit for the construction of cognitive systems and cognitive architectures."
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.urls]
+Homepage = "https://hiaac.unicamp.br"
+"Bug Tracker" = "https://github.com/H-IAAC/CST-Python/issues"
+# Documentation =
+
+[project.optional-dependencies]
+tests = ["mypy", "testbook", "ipython", "ipykernel", "numpy", "matplotlib"]
+
+[tool.setuptools]
+include-package-data = true
+package-dir = {"" = "src"}
+# install_requires =
+# numpy
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
