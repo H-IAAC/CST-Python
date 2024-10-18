@@ -9,11 +9,13 @@ from typing import List, Optional
 from cst_python.python import alias
 from .memory import Memory
 from .memory_buffer import MemoryBuffer
+from .memory_observer import MemoryObserver
 
 #TODO: Profile, Broadcast, impending access, correct exception types
 
 #@alias.aliased
-class Codelet(abc.ABC):
+class Codelet(MemoryObserver): #(abc.ABC) is not necessary
+    _last_id = 0
 
     def __init__(self) -> None:
         self._threshold = 0.0
@@ -25,16 +27,17 @@ class Codelet(abc.ABC):
         self._time_step = 300
         self._enabled = True
         self._enable_count = 0
-        self._name = threading.currentThread().name
+        self._name = threading.current_thread().name+"|"+type(self).__name__+str(Codelet._last_id)
         self._last_start_time = 0.0
         self._lock = threading.RLock()
         self._activation = 0.0
         #self._timer = 
         self._is_profiling = False
-        self._thread : threading.Thread = None
+        self._thread : threading.Thread = threading.Thread(target=self.run, daemon=True)
         self._codelet_profiler = None
         self._additional_wait = 0.0
 
+        Codelet._last_id += 1
 
 
     
@@ -80,8 +83,13 @@ class Codelet(abc.ABC):
     @activation.setter
     def activation(self, value:float):
         if value > 1.0 or value < 0.0:
+            if value > 1.0:
+                self._activation = 1.0
+            else:
+                self._activation = 0.0
+
             raise ValueError(f"Codelet activation must be in (0.0 , 1.0) \
-                             (value {value} is not allowed).")
+(value {value} is not allowed).")
         
         self._activation = value
 
@@ -105,17 +113,22 @@ class Codelet(abc.ABC):
     def outputs(self, value:List[Memory]):
         self._outputs = value
 
-    #@alias.alias("get_threshould", "getThreshould")
+    #@alias.alias("get_threshold", "getThreshold")
     @property
-    def threshould(self) -> float:
+    def threshold(self) -> float:
         return self._threshold
 
-    #@alias.alias("set_threshould", "setThreshould")
-    @threshould.setter
-    def threshould(self, value:float):
-        if value > 1.0 or value < 1.0:
-            raise ValueError(f"Codelet threshould must be in (0.0 , 1.0) \
-                             (value {value} is not allowed).")
+    #@alias.alias("set_threshold", "setThreshold")
+    @threshold.setter
+    def threshold(self, value:float):
+        if value > 1.0 or value < 0.0:
+            if value > 1.0:
+                self._threshold = 1.0
+            else:
+                self._threshold = 0.0
+
+            raise ValueError(f"Codelet threshold must be in (0.0 , 1.0) \
+(value {value} is not allowed).")
         
         self._threshold = value
 
@@ -143,12 +156,12 @@ class Codelet(abc.ABC):
 
     #@alias.alias("IsProfiling")
     @property
-    def is_profiling(self) -> bool:
+    def profiling(self) -> bool:
         return self._is_profiling
 
     #@alias.alias("set_profiling", "setProfiling")
-    @is_profiling.setter
-    def is_profiling(self, value:bool):
+    @profiling.setter
+    def profiling(self, value:bool):
         if value is True:
             raise NotImplementedError("Profiling is not implemented")
 
@@ -187,17 +200,17 @@ class Codelet(abc.ABC):
             traceback.print_exception(e)
 
     def start(self) -> None:
-        thread = threading.Thread(target=self.run, daemon=True)
-        self._thread = thread
 
-        thread.start()
+        self._thread.start()
         #thread.join(0.0)
 
         
 
     def stop(self):
         self.loop = False
-        self._thread.join(0.0)
+
+        if self._thread.is_alive():
+            self._thread.join(0.0)
 
     #@alias.alias("impendingAccess")
     def impending_acess(self, accessing:Codelet) -> bool:
@@ -297,7 +310,7 @@ class Codelet(abc.ABC):
 
     #@alias.alias("getThreadName")
     def get_thread_name(self) -> str:
-        return threading.currentThread().name
+        return threading.current_thread().name
     
     #@alias.alias("to_string", "toString")
     def __str__(self) -> str:
@@ -306,16 +319,18 @@ class Codelet(abc.ABC):
         result = f"Codelet [activation={self._activation}, name={self._name}, "
 
         if self._broadcast is not None:
-            result += self._broadcast[min(len(self._broadcast), max_len)]
+            result += "broadcast="
+            result += str(self._broadcast[:min(len(self._broadcast), max_len)])
             result += ", "
-        
+
         if self._inputs is not None:
-            result += self._inputs[min(len(self._outputs), max_len)]
+            result += "inputs="
+            result += str(self._inputs[:min(len(self.inputs), max_len)])
             result += ", "
 
         if self._outputs is not None:
-            result += self._outputs[min(len(self._outputs), max_len)]
-            result += ", "
+            result += "outputs="
+            result += str(self._outputs[:min(len(self._outputs), max_len)])
         
         result += "]"
 
@@ -406,13 +421,13 @@ class Codelet(abc.ABC):
             if self._enable_count == 0:
                 self.calculate_activation()
 
-                if self.activation >= self.threshould:
+                if self.activation >= self.threshold:
                     self.proc()
             else:
                 self._raise_exception()
 
         except Exception as e:
-            #Logging
+            #TODO Logging
             pass
         
         finally:
@@ -452,7 +467,7 @@ class Codelet(abc.ABC):
 
             
             except Exception as e:
-                traceback.print_exception(e)
+                print(traceback.format_exc())
                 #logging
                 pass
 

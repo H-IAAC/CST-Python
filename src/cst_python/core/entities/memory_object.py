@@ -10,8 +10,8 @@ from .memory_observer import MemoryObserver
 class MemoryObject(Memory):
 
     def __init__(self) -> None:
-        self._id = 0.0
-        self._timestamp = 0.0
+        self._id = 0
+        self._timestamp = 0
         self._evaluation = 0.0
         self._info : Any = None
         self._name = ""
@@ -24,10 +24,10 @@ class MemoryObject(Memory):
 
         return state
     
-    def get_id(self) -> float:
+    def get_id(self) -> int:
         return self._id
     
-    def set_id(self, memory_id: float) -> None:
+    def set_id(self, memory_id: int) -> None:
         self._id = memory_id
 
     def get_info(self) -> Any:
@@ -35,7 +35,7 @@ class MemoryObject(Memory):
     
     def set_info(self, value: Any) -> int:
         self._info = value
-        self._timestamp = time.time()
+        self._timestamp = int(time.time()*1000)
         self._notify_memory_observers()
 
         return -1
@@ -47,16 +47,16 @@ class MemoryObject(Memory):
     def update_info(self, info:Any) -> None:
         self.set_info(info)
 
-    def get_timestamp(self) -> float:
+    def get_timestamp(self) -> int:
         return self._timestamp
 
     @property
-    def timestamp(self) -> float:
+    def timestamp(self) -> int:
         return self._timestamp
 
     #@alias.alias("setTimestamp")
     @timestamp.setter
-    def timestamp(self, value:float) -> None:
+    def timestamp(self, value:int) -> None:
         self._timestamp = value
 
     def get_name(self) -> str:
@@ -72,14 +72,17 @@ class MemoryObject(Memory):
         return self._evaluation
 
     def set_evaluation(self, evaluation: float) -> None:
-        return self._evaluation
+        self._evaluation = evaluation
 
     #@alias.alias("toString", "to_string")
     def __str__(self) -> str:
         return f"MemoryObject [idmemoryobject={self._id}, \
-                timestamp={self._timestamp}, evaluation={self._evaluation}, \
-                I={self._info}, name={self._name}]"
+timestamp={self._timestamp}, evaluation={self._evaluation}, \
+I={self._info}, name={self._name}]"
     
+    def __repr__(self) -> str:
+        return str(self)
+
     #@alias.alias("hashCode", "hash_code")
     def __hash__(self) -> int:
         prime = 31
@@ -95,7 +98,7 @@ class MemoryObject(Memory):
     
     #@alias.alias("equals")
     def __eq__(self, value: MemoryObject) -> bool:
-        if self == value:
+        if id(self) == id(value):
             return True
         if value is None:
             return False

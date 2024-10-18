@@ -72,7 +72,6 @@ class RawMemory:
         mo = MemoryObject()
 
         mo.set_info(info)
-        mo.timestamp = time.time()
         mo.set_evaluation(0.0)
         mo.set_name(name)
 
