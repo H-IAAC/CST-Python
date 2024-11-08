@@ -18,9 +18,8 @@ authors:
     email: paulad@unicamp.br
     affiliation: H.IAAC-UNICAMP
     orcid: 'https://orcid.org/0000-0002-1534-5744'
-identifiers:
-  - type: doi
-    value: 10.5281/zenodo.14057065
+doi: 10.5281/zenodo.14057065 
+url: https://github.com/H-IAAC/CST-Python'
 repository-code: 'https://github.com/H-IAAC/CST-Python'
 repository-artifact: 'https://pypi.org/project/cst-python/'
 abstract: >-
