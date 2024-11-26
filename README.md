@@ -33,6 +33,12 @@ This project was developed as part of the Cognitive Architectures research line 
     pip install .
     ```
 
+## Citation
+
+<!--Don't remove the following tags, it's used for placing the generated citation from the CFF file-->
+<!--CITATION START-->
+<!--CITATION END-->
+
 ## Authors
   
 - (2023-) Elton Cardoso do Nascimento: M. Eng. student, FEEC-UNICAMP
