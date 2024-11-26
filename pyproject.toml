@@ -14,6 +14,7 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
 ]
+requires-python = ">= 3.10"
 dynamic = ["version"]
 
 [project.readme]
@@ -27,10 +28,13 @@ Homepage = "https://hiaac.unicamp.br"
 
 [project.optional-dependencies]
 tests = ["mypy", "testbook", "ipython", "ipykernel", "numpy", "matplotlib"]
+doc_generation = ["sphinx", "sphinx_rtd_theme", "nbsphinx", "sphinx-mdinclude==0.5.4"]
+dev = ["cffconvert"]
 
 [tool.setuptools]
 include-package-data = true
 package-dir = {"" = "src"}
+license-files = ["LICENSE"]
 # install_requires =
 # numpy
 
