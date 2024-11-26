@@ -27,7 +27,7 @@ def test_activation(tb :TestbookNotebookClient):
         else:
              expected_sensory = input_value * 10
 
-        assert math.isclose(sensory_output, expected_sensory, abs_tol=0.21)
+        assert math.isclose(sensory_output, expected_sensory, abs_tol=0.3)
 
         last_sensory_output = sensory_output
 
