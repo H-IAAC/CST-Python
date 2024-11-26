@@ -152,8 +152,8 @@ class Memory(abc.ABC):
         Returns:
             bool: True if is the same name.
         '''
-        if self._name is None:
+        if self.get_name() is None:
             return False
         
-        return self._name.lower() == other_name.lower()
+        return self.get_name().lower() == other_name.lower()
     

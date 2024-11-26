@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from typing import Any, Set
+from typing import Any, Set, cast
 
 from cst_python.python import alias
 from .memory import Memory
@@ -131,7 +131,11 @@ I={self._info}, name={self._name}]"
         return result
     
     #@alias.alias("equals")
-    def __eq__(self, value: MemoryObject) -> bool:
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, MemoryObject):
+            return False
+        value = cast(MemoryObject, value)
+
         if id(self) == id(value):
             return True
         if value is None:

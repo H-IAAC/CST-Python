@@ -99,7 +99,7 @@ class Mind:
         '''
         mc = None
 
-        if self._raw is not None:
+        if self._raw_memory is not None:
             mc = self._raw_memory.create_memory_container(name)
 
         return mc
@@ -128,7 +128,7 @@ class Mind:
         mo = None
         
         if self._raw_memory is not None:
-            mo = self._raw_memory.create_rest_memory_object(name, hostname, port)
+            mo = self._raw_memory.create_rest_memory_object(name, port, hostname)
 
         return mo
 
@@ -155,7 +155,7 @@ class Mind:
         mc = None
         
         if self._raw_memory is not None:
-            mc = self._raw_memory.create_rest_memory_container(name, hostname, port)
+            mc = self._raw_memory.create_rest_memory_container(name, port, hostname)
 
         return mc
     
@@ -195,7 +195,8 @@ class Mind:
         if self._code_rack is not None:
             self._code_rack.add_codelet(co)
 
-        self.register_codelet(co, group_name)
+        if group_name is not None:
+            self.register_codelet(co, group_name)
 
         return co
     

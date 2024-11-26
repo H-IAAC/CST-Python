@@ -1,5 +1,6 @@
 import warnings
 import functools
+import typing
 from typing import Any, Callable, Type
 
 class aliased:
@@ -26,6 +27,7 @@ class alias:
     def __init__(self, *aliases:str) -> None:
         self._aliases = set(aliases)
 
+    @typing.no_type_check
     def __call__(self, method:Callable) -> Callable:
         method._aliases = self._aliases
 

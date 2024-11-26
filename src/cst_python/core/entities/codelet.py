@@ -188,7 +188,7 @@ class Codelet(MemoryObserver): #(abc.ABC) is not necessary
 
     #@alias.alias("get_time_step", "getTime_step")
     @property
-    def time_step(self) -> float:
+    def time_step(self) -> int:
         '''
         If the proc() method is set to be called automatically in a loop, this
 	    variable stores the time step for such a loop. A timeStep of value 0
@@ -200,7 +200,7 @@ class Codelet(MemoryObserver): #(abc.ABC) is not necessary
 
     #@alias.alias("set_time_step", "setTime_step")
     @time_step.setter
-    def time_step(self, value:float):
+    def time_step(self, value:int):
         
         self._time_step = value
 
@@ -471,23 +471,6 @@ class Codelet(MemoryObserver): #(abc.ABC) is not necessary
 
         return inputs_of_type
 
-    #@alias.alias("getBroadcast")
-    def get_broadcast(self, name:str) -> Memory:
-        '''
-        Returns a specific memory (with the given name) from the broadcast list
-	    of the Codelet.
-
-        Args:
-            name (str): the name of a memory to be retrieved at the broadcast list.
-
-        Returns:
-            Memory: the memory.
-        '''
-        if self._broadcast is not None:
-            for m in self._broadcast:
-                if m.compare_name(name):
-                    return m
-
     #@alias.alias("addBroadcast")
     def add_broadcast(self, memory:Memory) -> None:
         '''
@@ -551,7 +534,7 @@ class Codelet(MemoryObserver): #(abc.ABC) is not necessary
         return result
     
     def _get_memory(self, search_list:List[Memory], type:Optional[str]=None, 
-                    index:Optional[int]=None, name:Optional[str]=None) -> Memory:
+                    index:Optional[int]=None, name:Optional[str]=None) -> Memory|None:
         '''
         This method returns an memory from a list. If it couldn't
         find the given M, it sets this codelet as not able to perform proc(), and
@@ -597,7 +580,7 @@ class Codelet(MemoryObserver): #(abc.ABC) is not necessary
         return found_MO
 
     #@alias.alias("getInput")
-    def get_input(self, type:Optional[str]=None, index:Optional[int]=None, name:Optional[str]=None) -> Memory:
+    def get_input(self, type:Optional[str]=None, index:Optional[int]=None, name:Optional[str]=None) -> Memory|None:
         '''
         This method returns an input memory from its input list. If it couldn't
 	    find the given M, it sets this codelet as not able to perform proc(), and
