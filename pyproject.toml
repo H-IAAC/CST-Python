@@ -34,6 +34,7 @@ dev = ["cffconvert"]
 [tool.setuptools]
 include-package-data = true
 package-dir = {"" = "src"}
+license-files = ["LICENSE"]
 # install_requires =
 # numpy
 

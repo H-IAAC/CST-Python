@@ -58,8 +58,11 @@ Project supported by the brazilian Ministry of Science, Technology and Innovatio
 
 ## License
 
+CST-Python is a code derived from [main cst code](https://github.com/CST-Group/cst).
+
 ```
 Copyright 2024 H.IAAC
+Copyright 2016 CST-Group
 
 Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
 you may not use this file except in compliance with the License.
