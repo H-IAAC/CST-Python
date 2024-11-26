@@ -1,6 +1,11 @@
 import re
+try:
+    import cffconvert
+except:
+    import warnings
+    warnings.warn("cffconvert not installed. Not updating README citation.")
 
-import cffconvert
+    exit()
 
 with open("CITATION.CFF", "r") as file:
     cff_content = file.read()
