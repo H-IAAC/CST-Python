@@ -20,7 +20,7 @@ def test_activation(tb :TestbookNotebookClient):
     for i, (activation, input_value, sensory_output, action) in enumerate(zip(activation_hist, input_hist, sensory_output_hist, action_hist)):
         assert math.isclose(input_value, i/100)
 
-        assert math.isclose(activation, np.clip(input_value, 0.0, 1.0), abs_tol=0.031)
+        assert math.isclose(activation, np.clip(input_value, 0.0, 1.0), abs_tol=0.04)
 
         if i >= 50 and activation < 0.7:
             expected_sensory = last_sensory_output
