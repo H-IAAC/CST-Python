@@ -37,6 +37,14 @@ This project was developed as part of the Cognitive Architectures research line 
 
 <!--Don't remove the following tags, it's used for placing the generated citation from the CFF file-->
 <!--CITATION START-->
+```bibtext
+@software{Cardoso_do_Nascimento_CST-Python,
+author = {Cardoso do Nascimento, Elton and Dornhofer Paro Costa, Paula},
+doi = {10.5281/zenodo.14057065},
+title = {CST-Python},
+url = {https://github.com/H-IAAC/CST-Python'}
+}
+```
 <!--CITATION END-->
 
 ## Authors
