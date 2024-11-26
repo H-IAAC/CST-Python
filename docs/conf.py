@@ -110,3 +110,16 @@ except:
 
 shutil.copyfile(os.path.join(project_root, "README.md"), os.path.join(project_root, "docs/README.md"))
 shutil.copyfile(os.path.join(project_root,"examples", "README.md"), os.path.join(project_root, "docs/Examples.md"))
+
+#Copy examples images
+shutil.rmtree("_build/html/_examples/_examples", ignore_errors=True )
+def ignore_ipynb(dir, contents):
+    result = []
+    for c in contents:
+        if os.path.isfile(os.path.join(dir,c)) and c.endswith(".ipynb"):
+            result += [c]
+    return result
+
+shutil.copytree(os.path.join(project_root, "docs", "_examples"),
+                os.path.join(project_root, "docs", "_build", "html", "_examples", "_examples"),
+                ignore=ignore_ipynb)
