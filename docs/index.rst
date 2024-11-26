@@ -7,6 +7,7 @@
 
    readme_link
    self
+   src/Differences from CST-Java.md
 
 .. toctree::
    :maxdepth: 1
