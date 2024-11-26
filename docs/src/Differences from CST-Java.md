@@ -1,6 +1,6 @@
 # Differences from CST-JAVA
 
-CST-Python is a port of the CST-Java to Python. However, the intention is only to port the existing elements in cst.core and the Ideas functionalities, to enable the creation of basic CST applications and interaction with other architectures in Java.
+CST-Python is a port of the CST-Java to Python. However, the intention is only to port the existing elements in cst.core and the Ideas functionalities, to enable the creation of basic CST applications for prototyping and interaction with other architectures in Java.
 
 At this time, the following elements are not implemented:
 - Coalition
