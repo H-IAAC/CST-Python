@@ -64,7 +64,7 @@ class GymCodelet(Codelet):
         self._common_memories["reset"].add_memory_observer(self)
 
         self._last_reset = 0
-
+    
     @property
     def reward_memory(self) -> MemoryObject:
         '''
@@ -147,6 +147,16 @@ class GymCodelet(Codelet):
         self.step_count_memory.set_info(step_count)
 
         self.sample_to_memories(observation, self.observation_memories)
+
+    @classmethod
+    def reset_indexes(cls) -> None:
+        '''
+        Reset the indexes for setting the sufix of new memories.
+        '''
+        cls._last_indexes : dict[str, int] = {"reward":-1, "reset":-1, 
+                                      "terminated":-1, "truncated":-1, 
+                                      "info":-1, "seed":-1,
+                                      "step_count":-1}
 
     @classmethod
     def space_to_memories(cls, mind:Mind, 
