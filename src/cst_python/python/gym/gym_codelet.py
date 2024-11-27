@@ -14,7 +14,10 @@ class GymCodelet(Codelet):
     environment with the action. 
     '''
 
-    _last_indexes : dict[str, int] = {"reward":-1, "reset":-1, "terminated":-1, "truncated":-1, "info":-1, "seed":-1}
+    _last_indexes : dict[str, int] = {"reward":-1, "reset":-1, 
+                                      "terminated":-1, "truncated":-1, 
+                                      "info":-1, "seed":-1,
+                                      "step_count":-1}
 
     def __init__(self, mind:Mind, env:gym.Env):
         '''
@@ -36,7 +39,7 @@ class GymCodelet(Codelet):
         self.action_memories = self.space_to_memories(mind, env.action_space, action=True)
 
         self._common_memories : dict[str, MemoryObject] = {}
-        for name in ["reward", "reset", "terminated", "truncated", "info", "seed"]:
+        for name in ["reward", "reset", "terminated", "truncated", "info", "seed", "step_count"]:
             self._last_indexes[name] += 1
 
             memory_name = name
@@ -51,6 +54,7 @@ class GymCodelet(Codelet):
         self._common_memories["truncated"].set_info(False)
         self._common_memories["info"].set_info({})
         self._common_memories["seed"].set_info(None)
+        self._common_memories["step_count"].set_info(0)
 
 
         self.is_memory_observer = True
@@ -59,7 +63,7 @@ class GymCodelet(Codelet):
             memory.add_memory_observer(self)
         self._common_memories["reset"].add_memory_observer(self)
 
-        self._last_reset = self._common_memories["reset"].get_timestamp()
+        self._last_reset = 0
 
     @property
     def reward_memory(self) -> MemoryObject:
@@ -105,6 +109,13 @@ class GymCodelet(Codelet):
         '''
         return self._common_memories["seed"]
 
+    @property
+    def step_count_memory(self) -> MemoryObject:
+        '''
+        Memory that contains the step count for the current environment
+        episode.
+        '''
+        return self._common_memories["step_count"]
     
     def access_memory_objects(self) -> None: #NOSONAR
         pass
@@ -120,18 +131,20 @@ class GymCodelet(Codelet):
             reward = 0.0
             terminated = False
             truncated = False
+            step_count = 0
 
         else:
             action = self.memories_to_space(self.action_memories, self.env.action_space)
             observation, r, terminated, truncated, info = self.env.step(action)
             reward = float(r) #SupportsFloat to float
 
-            print("Observation", observation)
+            step_count = self.step_count_memory.get_info()+1
     
         self.reward_memory.set_info(reward)
         self.terminated_memory.set_info(terminated)
         self.truncated_memory.set_info(truncated)
         self.info_memory.set_info(info)
+        self.step_count_memory.set_info(step_count)
 
         self.sample_to_memories(observation, self.observation_memories)
 
