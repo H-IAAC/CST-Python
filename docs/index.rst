@@ -19,6 +19,7 @@
    _examples/Implementing a Architecture
    _examples/Publisher-Subscriber
    _examples/Activation and Monitoring
+   _examples/Gymnasium Integration
 
 .. toctree::
    :maxdepth: 4
