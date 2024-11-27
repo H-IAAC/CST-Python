@@ -30,6 +30,7 @@ Homepage = "https://hiaac.unicamp.br"
 tests = ["mypy", "testbook", "ipython", "ipykernel", "numpy", "matplotlib"]
 doc_generation = ["sphinx", "sphinx_rtd_theme", "nbsphinx", "sphinx-mdinclude==0.5.4"]
 dev = ["cffconvert"]
+gym = ["gymnasium"]
 
 [tool.setuptools]
 include-package-data = true
