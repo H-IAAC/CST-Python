@@ -11,6 +11,10 @@ from .memory_object import MemoryObject
 #TODO createMemoryContainer, REST methods
 
 class RawMemory:
+    '''
+    The Raw Memory contains all memories in the system.
+    '''
+    
     _last_id = 0
 
     def __init__(self) -> None:
