@@ -153,7 +153,7 @@ class GymCodelet(Codelet):
         '''
         Reset the indexes for setting the sufix of new memories.
         '''
-        cls._last_indexes : dict[str, int] = {"reward":-1, "reset":-1, 
+        cls._last_indexes = {"reward":-1, "reset":-1, 
                                       "terminated":-1, "truncated":-1, 
                                       "info":-1, "seed":-1,
                                       "step_count":-1}
