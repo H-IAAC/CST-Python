@@ -1,4 +1,4 @@
-[![](https://img.shields.io/pypi/v/cst_python?style=for-the-badge)](https://pypi.org/project/cst_python) [![](https://img.shields.io/pypi/l/cst_python?style=for-the-badge)](https://github.com/H-IAAC/CST-Python/blob/main/LICENSE) [![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/H-IAAC/CST-Python)
+[![](https://img.shields.io/pypi/v/cst_python?style=for-the-badge)](https://pypi.org/project/cst_python) [![](https://img.shields.io/pypi/l/cst_python?style=for-the-badge)](https://github.com/H-IAAC/CST-Python/blob/main/LICENSE) [![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/H-IAAC/CST-Python) [![](https://img.shields.io/badge/-Documentation-fe9c22?style=for-the-badge&link=https%3A%2F%2Fh-iaac.github.io%CST-Python%2F)](https://h-iaac.github.io/CST-Python) [![](https://img.shields.io/badge/DOI-10.5281/zenodo.14057065-1082c3?style=for-the-badge)](https://doi.org/10.5281/zenodo.14057065)
 
 # CST-Python
 
@@ -33,20 +33,36 @@ This project was developed as part of the Cognitive Architectures research line 
     pip install .
     ```
 
+## Citation
+
+<!--Don't remove the following tags, it's used for placing the generated citation from the CFF file-->
+<!--CITATION START-->
+```bibtext
+@software{Cardoso_do_Nascimento_CST-Python,
+author = {Cardoso do Nascimento, Elton and Dornhofer Paro Costa, Paula},
+doi = {10.5281/zenodo.14057065},
+title = {CST-Python},
+url = {https://github.com/H-IAAC/CST-Python'}
+}
+```
+<!--CITATION END-->
+
 ## Authors
   
-- (2023-) Elton Cardoso do Nascimento: M. Eng. student, FEEC-Unicamp
+- (2023-) Elton Cardoso do Nascimento: M. Eng. student, FEEC-UNICAMP
+- (Advisor, 2023-) Paula Dornhofer Paro Costa: Professor, FEEC-UNICAMP
   
 ## Acknowledgements
 
-This project is part of the Hub for Artificial Intelligence and Cognitive Architectures
-(H.IAAC- Hub de Inteligência Artificial e Arquiteturas Cognitivas). We acknowledge the 
-support of PPI-Softex/MCTI by grant 01245.013778/2020-21 through the Brazilian Federal Government.
+Project supported by the brazilian Ministry of Science, Technology and Innovations, with resources from Law No. 8,248, of October 23, 1991
 
 ## License
 
+CST-Python is a code derived from [main cst code](https://github.com/CST-Group/cst).
+
 ```
 Copyright 2024 H.IAAC
+Copyright 2016 CST-Group
 
 Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3 (the "License");
 you may not use this file except in compliance with the License.
