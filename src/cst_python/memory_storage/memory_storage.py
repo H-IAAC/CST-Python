@@ -3,12 +3,17 @@ import weakref
 import json
 import threading
 from concurrent.futures import ThreadPoolExecutor
+import logging
+import functools
 from typing import Optional, cast
 
 import redis
 
 from cst_python.core.entities import Codelet, Mind, Memory, MemoryObject
 from .memory_encoder import MemoryEncoder
+
+logger = logging.getLogger("MemoryStorageCodelet")
+logger.setLevel(logging.DEBUG)
 
 class MemoryStorageCodelet(Codelet):
     def __init__(self, mind:Mind, node_name:Optional[str]=None, mind_name:Optional[str]=None, request_timeout:float=500e-3) -> None:
@@ -96,7 +101,8 @@ class MemoryStorageCodelet(Codelet):
                 
                 self._client.hset(f"{self._mind_name}:memories:{memory_name}", mapping=memory_impostor)
 
-            subscribe_func = lambda message : self.update_memory(memory_name)
+            subscribe_func = lambda _, name : self.update_memory(name)
+            subscribe_func = functools.partial(subscribe_func, name=memory_name)
             self._pubsub.subscribe(**{f"{self._mind_name}:memories:{memory_name}:update":subscribe_func})
 
         #Update memories
@@ -111,7 +117,7 @@ class MemoryStorageCodelet(Codelet):
                 self.update_memory(memory_name)
 
     def update_memory(self, memory_name:str) -> None:
-        print(self._node_name, "Updating memory", memory_name)
+        logger.info(f"Updating memory [{memory_name}@{self._node_name}]")
 
         if memory_name not in self._memories:
             self._pubsub.unsubscribe(f"{self._mind_name}:memories:{memory_name}:update")
@@ -132,8 +138,8 @@ class MemoryStorageCodelet(Codelet):
 
     def _send_memory(self, memory:Memory) -> None:
         memory_name = memory.get_name()
-        print(self._node_name, "Send memory", memory_name)
-        
+        logger.info(f"Sending memory [{memory_name}@{self._node_name}]")
+
         memory_dict = MemoryEncoder.to_dict(memory, jsonify_info=True)
         memory_dict["owner"] = ""
 
@@ -146,8 +152,7 @@ class MemoryStorageCodelet(Codelet):
 
     def _retrieve_memory(self, memory:Memory) -> None:
         memory_name = memory.get_name()
-
-        print(self._node_name, "Retrieve", memory_name)
+        logger.info(f"Retrieving memory [{memory_name}@{self._node_name}]")
 
         if memory_name in self._waiting_retrieve:
             return
@@ -161,7 +166,7 @@ class MemoryStorageCodelet(Codelet):
             self._request_memory(memory_name, memory_dict["owner"])
 
             if not event.wait(timeout=self._request_timeout):
-                print(self._node_name, "Request failed", memory_name)
+                logger.warning(f"Request failed [{memory_name}@{memory_dict['owner']} to {self._node_name}]")
                 #Request failed
                 self._send_memory(memory)
                 return 
@@ -175,7 +180,7 @@ class MemoryStorageCodelet(Codelet):
         self._waiting_retrieve.remove(memory_name)
 
     def _request_memory(self, memory_name:str, owner_name:str) -> None:
-        print(self._node_name, "Requesting", memory_name)
+        logger.info(f"Requesting memory [{memory_name}@{owner_name} to {self._node_name}]")
 
         request_addr = f"{self._mind_name}:nodes:{owner_name}:transfer_memory"
         
@@ -196,7 +201,7 @@ class MemoryStorageCodelet(Codelet):
         memory_name = request["memory_name"]
         requesting_node = request["node"]
 
-        print(self._node_name, "Tranfering", memory_name)
+        logger.info(f"Transfering memory to server [{memory_name}@{self._node_name}]")
 
         if memory_name in self._memories:
             memory = self._memories[memory_name]
