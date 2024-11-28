@@ -22,6 +22,7 @@ class MemoryEncoder(json.JSONEncoder):
 
         return data
     
+    @staticmethod
     def load_memory(memory:Memory, memory_dict:dict[str,Any], load_json:bool=True):
         memory.set_evaluation(float(memory_dict["evaluation"]))
         memory.set_id(int(memory_dict["id"]))

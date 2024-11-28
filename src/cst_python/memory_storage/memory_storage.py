@@ -27,10 +27,10 @@ class MemoryStorageCodelet(Codelet):
         self._pubsub = self._client.pubsub()
         self._pubsub_thread : redis.client.PubSubWorkerThread = self._pubsub.run_in_thread()
 
+        if node_name is None:
+            node_name = "node"
         base_name = node_name
-        if base_name is None:
-            base_name = "node"
-
+        
         if self._client.sismember(f"{mind_name}:nodes", node_name):
             node_number = self._client.scard(f"{mind_name}:nodes")
             node_name = base_name+str(node_number)
@@ -58,17 +58,17 @@ class MemoryStorageCodelet(Codelet):
 
         self._request = None
 
-    def calculate_activation(self) -> None:
+    def calculate_activation(self) -> None: #NOSONAR
         pass
 
-    def access_memory_objects(self) -> None:
+    def access_memory_objects(self) -> None: #NOSONAR
         pass
 
     def proc(self) -> None:
         
         #Check new memories
 
-        mind_memories = {}
+        mind_memories : dict[str, Memory] = {}
         for memory in self._mind.raw_memory.all_memories:
             if memory.get_name() == "": #No name -> No MS
                 continue
@@ -81,14 +81,14 @@ class MemoryStorageCodelet(Codelet):
         #Check only not here (memories_names not in mind should be garbage collected)
         difference = mind_memories_names - memories_names
         for memory_name in difference:
-            memory : Memory = mind_memories[memory_name]
+            memory = mind_memories[memory_name]
             self._memories[memory_name] = memory
 
             if self._client.exists(f"{self._mind_name}:memories:{memory_name}"):
                 self._retrieve_executor.submit(self._retrieve_memory, memory)
                 
             else: #Send impostor with owner
-                memory_impostor = {"name":memory.get_name(),
+                memory_impostor : dict[str|bytes, str|float|int] = {"name":memory.get_name(),
                                    "evaluation" : 0.0,
                                    "I": "",
                                    "id" : 0,
@@ -116,7 +116,9 @@ class MemoryStorageCodelet(Codelet):
         if memory_name not in self._memories:
             self._pubsub.unsubscribe(f"{self._mind_name}:memories:{memory_name}:update")
 
-        timestamp = float(self._client.hget(f"{self._mind_name}:memories:{memory_name}", "timestamp"))
+        timestamp_result = self._client.hget(f"{self._mind_name}:memories:{memory_name}", "timestamp")
+        assert timestamp_result is not None
+        timestamp = float(timestamp_result)
         memory = self._memories[memory_name]
         memory_timestamp = memory.get_timestamp()
         
@@ -181,14 +183,14 @@ class MemoryStorageCodelet(Codelet):
         request = json.dumps(request_dict)
         self._client.publish(request_addr, request)
 
-    def _handler_notify_transfer(self, message:str) -> None:
+    def _handler_notify_transfer(self, message:dict[str,str]) -> None:
         memory_name = message["data"]
         if memory_name in self._waiting_request_events:
             event = self._waiting_request_events[memory_name]
             event.set()
             del self._waiting_request_events[memory_name]
 
-    def _handler_transfer_memory(self, message) -> None:
+    def _handler_transfer_memory(self, message:dict[str,str]) -> None:
         request = json.loads(message["data"])
         
         memory_name = request["memory_name"]
