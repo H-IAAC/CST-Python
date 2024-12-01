@@ -7,10 +7,6 @@ on:
 
 jobs:
   test:
-    uses: ./.github/workflows/test_inner.yml
-    with:
-      os: ${{ matrix.os }}
-      python-version: ${{ matrix.python-version }}
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -32,7 +28,13 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-
+      - uses: actions/checkout@v2
+      
+      - uses: ./.github/workflows/test_inner
+        with:
+          os: ${{ matrix.os }}
+          python-version: ${{ matrix.python-version }}
+  
   coverage-check:
     runs-on: ubuntu-latest
     needs: 
