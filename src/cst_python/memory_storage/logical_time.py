@@ -3,7 +3,6 @@ from __future__ import annotations
 import abc
 import functools
 
-from typing import Self
 
 class LogicalTime(abc.ABC):
 
@@ -23,7 +22,7 @@ class LogicalTime(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def syncronize(cls, time0:Self, time1:Self) -> "LogicalTime":
+    def syncronize(cls, time0, time1) -> "LogicalTime":
         ...
 
     @abc.abstractmethod
@@ -77,7 +76,7 @@ class LamportTime(LogicalTime):
         return LamportTime(int(string))
 
     @classmethod
-    def syncronize(cls, time0:Self, time1:Self) -> "LamportTime":
+    def syncronize(cls, time0, time1) -> "LamportTime":
         new_time = 0
         if time0 < time1:
             new_time = time1._time
