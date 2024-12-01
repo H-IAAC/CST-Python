@@ -15,10 +15,10 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         python-version: ["3.10", "3.11", "3.12"]
     
+    
     services:
       # Label used to access the service container
       redis:
-        if: runner.os == 'Linux'
         # Docker Hub image
         image: redis
         # Set health checks to wait until redis has started
@@ -27,36 +27,11 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          # Maps port 6379 on service container to the host
-          - 6379:6379
-
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install dependencies
-      run: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install pytest
-        python3 -m pip install pytest-cov
-        python3 -m pip install -e .[tests,gym,memory_storage]
-
-    - name: Tests
-      run: |
-        pytest --cov=cst_python --cov-report json  
-      shell: bash
-
-    - if: ${{matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'}}
-      name: Upload coverage report
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage_report
-        path: coverage.json
+      - uses: ./.github/workflows/test_inner.yml
+        with:
+          os: ${{ matrix.os }}
+          python-version: ${{ matrix.python-version }}
   
   coverage-check:
     runs-on: ubuntu-latest
