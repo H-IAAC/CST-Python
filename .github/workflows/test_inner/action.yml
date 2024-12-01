@@ -26,9 +26,9 @@ runs:
         python3 -m pip install -e .[tests,gym]
   
     - name: Tests
+      shell: bash
       run: |
         pytest --cov=cst_python --cov-report json  
-        shell: bash
       
     - if: ${{inputs.os == 'ubuntu-latest' && inputs.python-version == '3.12'}}
       name: Upload coverage report
