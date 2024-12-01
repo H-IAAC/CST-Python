@@ -19,6 +19,7 @@ runs:
         python-version: ${{inputs.python-version}}
 
     - name: Install dependencies
+      shell: bash
       run: |
         python3 -m pip install --upgrade pip
         python3 -m pip install pytest
