@@ -28,6 +28,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
+      - uses: actions/checkout@v2
+      
       - uses: ./.github/workflows/test_inner.yml
         with:
           os: ${{ matrix.os }}
