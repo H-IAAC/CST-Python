@@ -8,7 +8,7 @@ When using Memory Storage, each local CST instance is called a node. Memories wi
 
 The collection of synchonized nodes is a mind, and a single Redis instance can support multiple minds with unique names.
 
-To use it, you just need to add a :class:`Memory Storage Codelet<cst_python.memory_storage.memory_storage>` to each mind participating in the network.
+To use it, you just need to add a :class:`Memory Storage Codelet<cst_python.memory_storage.memory_storage>` to each mind participating in the network. Check the [Memory Storage Example](https://h-iaac.github.io/CST-Python/_build/html/_examples/Memory%20Storage.html) for how to use it.
 
 ## Protocol
 
