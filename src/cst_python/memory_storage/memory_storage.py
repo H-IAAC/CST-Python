@@ -18,9 +18,10 @@ logger.setLevel(logging.DEBUG)
 
 class MemoryStorageCodelet(Codelet):
     '''
-    Synchonizes local memories with a Redis database.
+    Synchonizes local memories with a Redis database. 
 
-    When using MemoryStorage, each local CST instance is called a node. 
+    When using MemoryStorage, each local CST instance is called a node.
+    Memories with the same name in participating nodes are synchronized.
     
     The collection of synchonized nodes is a mind.
     A single Redis instance can support multiple minds with unique names
