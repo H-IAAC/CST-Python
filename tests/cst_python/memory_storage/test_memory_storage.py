@@ -100,6 +100,19 @@ class TestMemoryStorage(unittest.TestCase):
         assert "node" in members
         assert "node1" in members
 
+    def test_redis_args(self) -> None:
+        redis_args = {"host":"localhost", "port":6379}
+        ms_codelet = MemoryStorageCodelet(self.mind, **redis_args)
+        ms_codelet.time_step = 50
+        self.mind.insert_codelet(ms_codelet)
+        self.mind.start()
+
+        time.sleep(sleep_time)
+
+        members = client.smembers("default_mind:nodes")
+        assert len(members) == 1
+        assert "node" in members
+
     def test_memory_transfer(self) -> None:
         
         memory1 = self.mind.create_memory_object("Memory1", "INFO")
