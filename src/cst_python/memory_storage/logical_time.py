@@ -5,9 +5,18 @@ import functools
 
 
 class LogicalTime(abc.ABC):
+    '''
+    A logical time for distributed communication.
+    '''
 
     @abc.abstractmethod
     def increment(self) -> "LogicalTime":
+        '''
+        Returns a time with the self time incremented by one. 
+
+        Returns:
+            LogicalTime: incremented time.
+        '''
         ...
 
 
@@ -18,11 +27,31 @@ class LogicalTime(abc.ABC):
     @classmethod
     @abc.abstractmethod
     def from_str(cls, string:str) -> "LogicalTime":
+        '''
+        Creates a instance from a string.
+
+        Args:
+            string (str): String to create time, 
+                generated with str(LogicalTime).
+
+        Returns:
+            LogicalTime: Created time.
+        '''
         ...
 
     @classmethod
     @abc.abstractmethod
-    def syncronize(cls, time0, time1) -> "LogicalTime":
+    def syncronize(cls, time0:"LogicalTime", time1:"LogicalTime") -> "LogicalTime":
+        '''
+        Compares two times, and return the current time.
+
+        Args:
+            time0 (LogicalTime): first time to compare.
+            time1 (LogicalTime): second time to compare.
+
+        Returns:
+            LogicalTime: current time.
+        '''
         ...
 
     @abc.abstractmethod
@@ -48,6 +77,9 @@ class LogicalTime(abc.ABC):
 
 @functools.total_ordering
 class LamportTime(LogicalTime):
+    '''
+    Logical time implementation using Lamport times.
+    '''
 
     #Methods that total_ordering will overwrite
     __le__ = object.__lt__ # type: ignore
@@ -56,6 +88,12 @@ class LamportTime(LogicalTime):
 
 
     def __init__(self, initial_time:int=0):
+        '''
+        LamportTime initializer.
+
+        Args:
+            initial_time (int, optional): time to start the clock. Defaults to 0.
+        '''
         super().__init__()
         self._time = initial_time
 
@@ -77,6 +115,9 @@ class LamportTime(LogicalTime):
 
     @classmethod
     def syncronize(cls, time0, time1) -> "LamportTime":
+        if not (isinstance(time0, LamportTime) and isinstance(time1, LamportTime)):
+            raise ValueError("LamportTime can only synchonize LamportTime instances")
+        
         new_time = 0
         if time0 < time1:
             new_time = time1._time
