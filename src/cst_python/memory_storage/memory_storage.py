@@ -17,7 +17,9 @@ logger = logging.getLogger("MemoryStorageCodelet")
 logger.setLevel(logging.DEBUG)
 
 class MemoryStorageCodelet(Codelet):
-    def __init__(self, mind:Mind, node_name:Optional[str]=None, mind_name:Optional[str]=None, request_timeout:float=500e-3) -> None:
+    def __init__(self, mind:Mind, 
+                 node_name:Optional[str]=None, mind_name:Optional[str]=None, 
+                 request_timeout:float=500e-3, **redis_args) -> None:
         super().__init__()
         
         self._mind = mind
@@ -28,8 +30,11 @@ class MemoryStorageCodelet(Codelet):
         self._mind_name = cast(str, mind_name)
         
         self._memories : weakref.WeakValueDictionary[str, Memory] = weakref.WeakValueDictionary()
+
+        if "decode_responses" in redis_args:
+            del redis_args["decode_responses"]
         
-        self._client = redis.Redis(decode_responses=True)
+        self._client = redis.Redis(decode_responses=True, **redis_args)
         self._pubsub = self._client.pubsub()
         self._pubsub_thread : redis.client.PubSubWorkerThread = self._pubsub.run_in_thread(daemon=True)
 
