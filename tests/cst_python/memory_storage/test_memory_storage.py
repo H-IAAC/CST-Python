@@ -13,7 +13,7 @@ from numpy.testing import assert_array_almost_equal
 from cst_python import MemoryObject, Mind
 from cst_python.memory_storage import MemoryStorageCodelet
 
-sleep_time = 0.1
+sleep_time = 0.75
 
 
 def set_info(self:MemoryObject, value:Any, start_time:float) -> int:
@@ -57,6 +57,8 @@ class TestMemoryStorage(unittest.TestCase):
         self.mind.shutdown()
         self.mind2.shutdown()
         
+        self.client.flushall()
+
     def test_patch_memory_object(self) -> None:
 
         memory1 = MemoryObject()
