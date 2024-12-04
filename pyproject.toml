@@ -27,10 +27,11 @@ Homepage = "https://hiaac.unicamp.br"
 # Documentation =
 
 [project.optional-dependencies]
-tests = ["mypy", "testbook", "ipython", "ipykernel", "numpy", "matplotlib"]
+tests = ["mypy", "testbook", "ipython", "ipykernel", "numpy", "matplotlib", "types-redis"]
 doc_generation = ["sphinx", "sphinx_rtd_theme", "nbsphinx", "sphinx-mdinclude==0.5.4"]
 dev = ["cffconvert"]
 gym = ["gymnasium"]
+memory_storage = ["redis"]
 
 [tool.setuptools]
 include-package-data = true

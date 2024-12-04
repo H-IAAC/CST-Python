@@ -10,6 +10,13 @@
    src/Differences from CST-Java.md
 
 .. toctree::
+   :maxdepth: 4
+   :caption: Features
+   :hidden:
+
+   src/Memory Storage.md
+
+.. toctree::
    :maxdepth: 1
    :caption: Examples
    :hidden:
