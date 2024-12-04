@@ -35,11 +35,11 @@ class TestLamportTime(unittest.TestCase):
         assert time0._time == time0_time
         assert time1._time == time0_time+1
 
-    def test_synchonize(self):
+    def test_synchronize(self):
         time0 = LamportTime(initial_time=-10)
         time1 = LamportTime(initial_time=55)
 
-        time_s = LamportTime.syncronize(time0, time1)
+        time_s = LamportTime.synchronize(time0, time1)
 
         assert time_s > time0
         assert time_s > time1

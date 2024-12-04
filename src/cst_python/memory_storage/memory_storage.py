@@ -243,7 +243,7 @@ class MemoryStorageCodelet(Codelet):
 
         MemoryEncoder.load_memory(memory, memory_dict)
         message_time = LamportTime.from_str(memory_dict["logical_time"])
-        self._current_time = LamportTime.syncronize(self._current_time, message_time)
+        self._current_time = LamportTime.synchronize(self._current_time, message_time)
 
         self._last_update[memory_name] = memory.get_timestamp()
         self._memory_logical_time[memory_name] = message_time
@@ -277,7 +277,7 @@ class MemoryStorageCodelet(Codelet):
         data = data = json.loads(message["data"])
         if "logical_time" in data:
             message_time = LamportTime.from_str(data["logical_time"])
-            self._current_time = LamportTime.syncronize(message_time, self._current_time)
+            self._current_time = LamportTime.synchronize(message_time, self._current_time)
 
         memory_name = data["memory_name"]
         if memory_name in self._waiting_request_events:
@@ -296,7 +296,7 @@ class MemoryStorageCodelet(Codelet):
         data = json.loads(message["data"])
         if "logical_time" in data:
             message_time = LamportTime.from_str(data["logical_time"])
-            self._current_time = LamportTime.syncronize(message_time, self._current_time)
+            self._current_time = LamportTime.synchronize(message_time, self._current_time)
 
         request = data["request"]
         

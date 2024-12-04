@@ -41,7 +41,7 @@ class LogicalTime(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def syncronize(cls, time0:"LogicalTime", time1:"LogicalTime") -> "LogicalTime":
+    def synchronize(cls, time0:"LogicalTime", time1:"LogicalTime") -> "LogicalTime":
         '''
         Compares two times, and return the current time.
 
@@ -114,7 +114,7 @@ class LamportTime(LogicalTime):
         return LamportTime(int(string))
 
     @classmethod
-    def syncronize(cls, time0, time1) -> "LamportTime":
+    def synchronize(cls, time0, time1) -> "LamportTime":
         if not (isinstance(time0, LamportTime) and isinstance(time1, LamportTime)):
             raise ValueError("LamportTime can only synchonize LamportTime instances")
         
