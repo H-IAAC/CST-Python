@@ -4,11 +4,25 @@ from typing import Any
 from cst_python.core.entities import Memory
 
 class MemoryEncoder(json.JSONEncoder):
+    '''
+    Encodes and decodes Memories.
+    '''
     def default(self, memory:Memory):
         return MemoryEncoder.to_dict(memory)
     
     @staticmethod
-    def to_dict(memory:Memory, jsonify_info:bool=False):
+    def to_dict(memory:Memory, jsonify_info:bool=False) -> dict[str, Any]:
+        '''
+        Encodes a memory to a dict.
+
+        Args:
+            memory (Memory): memory to encode.
+            jsonify_info (bool, optional): if True, dumps the info to JSON
+                before return. Defaults to False.
+
+        Returns:
+            dict[str, Any]: the encoded memory.
+        '''
         data = {
             "timestamp": memory.get_timestamp(),
             "evaluation": memory.get_evaluation(),
@@ -22,7 +36,16 @@ class MemoryEncoder(json.JSONEncoder):
 
         return data
     
-    def load_memory(memory:Memory, memory_dict:dict[str,Any], load_json:bool=True):
+
+    @staticmethod
+    def load_memory(memory:Memory, memory_dict:dict[str,Any]):
+        '''
+        Load a memory from a dict.
+
+        Args:
+            memory (Memory): memory to store the loaded info.
+            memory_dict (dict[str,Any]): dict encoded memory.
+        '''
         memory.set_evaluation(float(memory_dict["evaluation"]))
         memory.set_id(int(memory_dict["id"]))
 
