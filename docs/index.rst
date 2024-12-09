@@ -26,6 +26,7 @@
    _examples/Implementing a Architecture
    _examples/Publisher-Subscriber
    _examples/Activation and Monitoring
+   _examples/Memory Storage
    _examples/Gymnasium Integration
 
 .. toctree::
