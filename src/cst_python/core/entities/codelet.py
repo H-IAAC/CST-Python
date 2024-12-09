@@ -694,8 +694,8 @@ class Codelet(MemoryObserver): #(abc.ABC) is not necessary
                 self._raise_exception()
 
         except Exception as e:
+            traceback.print_exception(e)
             #TODO Logging
-            pass
         
         finally:
             if self._codelet_profiler is not None:
