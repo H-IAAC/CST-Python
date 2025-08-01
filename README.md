@@ -14,6 +14,9 @@ This project was developed as part of the Cognitive Architectures research line 
 - src: cst_python source code
 - tests: code tests
 
+## Requeriments
+- Python >= 3.10
+- Other dependencies are automatically installed with pip
 
 ## Installation / Usage
 
@@ -32,6 +35,7 @@ This project was developed as part of the Cognitive Architectures research line 
     pip install --upgrade pip
     pip install .
     ```
+
 
 ## Citation
 
